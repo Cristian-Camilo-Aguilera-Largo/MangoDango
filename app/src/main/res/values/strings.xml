@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MangoDango</string>
+    <string name="curry">Curry</string>
+    <string name="dango">Dango</string>
+    <string name="ramen">Ramen</string>
+    <string name="soba">Soba</string>
+    <string name="sushi">Sushi</string>
+    <string name="tempura">Tempura</string>
+    <string name="valorD">$32.000</string>
+</resources>
