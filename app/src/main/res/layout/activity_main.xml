@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.294" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/ingresar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#EF57BF"
@@ -37,7 +37,7 @@
         app:layout_constraintVertical_bias="0.581" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/correo"
         android:layout_width="245dp"
         android:layout_height="40dp"
         android:ems="10"
@@ -65,7 +65,7 @@
         app:srcCompat="@drawable/mangodango" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/password"
         android:layout_width="245dp"
         android:layout_height="40dp"
         android:ems="10"
@@ -91,8 +91,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.224"
-        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/ingresar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.581" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_google"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:drawableStart="@drawable/ic_google"
+        android:drawablePadding="12dp"
+        android:background="@color/white"
+        android:gravity="start|center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="CONTINUAR CON GOOGLE"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.698" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,4 +45,24 @@ public class ButtonHandler {
             }
         });
     }
+
+    public void setupDatosButton(ImageButton datosButton) {
+        datosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActualizarPerfil.class);
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public void setupChangeDataButton(Button cambiarDatosButton) {
+        cambiarDatosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ChangeData.class);
+                context.startActivity(intent);
+            }
+        });
+    }
 }

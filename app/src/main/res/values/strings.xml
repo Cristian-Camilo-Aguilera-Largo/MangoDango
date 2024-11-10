@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">MangoDango</string>
-    <string name="curry">Curry</string>
-    <string name="dango">Dango</string>
-    <string name="ramen">Ramen</string>
-    <string name="soba">Soba</string>
-    <string name="sushi">Sushi</string>
-    <string name="tempura">Tempura</string>
-    <string name="valorD">$32.000</string>
+    <string name="app_name" translatable="false">MangoDango</string>
+    <string name="curry" translatable="false">Curry</string>
+    <string name="dango" translatable="false">Dango</string>
+    <string name="ramen" translatable="false">Ramen</string>
+    <string name="soba" translatable="false">Soba</string>
+    <string name="sushi" translatable="false">Sushi</string>
+    <string name="tempura" translatable="false">Tempura</string>
+    <string name="valorD" translatable="false">$32.000</string>
+    <string name="id_g_client" translatable="false">1006803295363-sfg0k2qp2sn6nlcoaq2qs4qr1051e2t9.apps.googleusercontent.com</string>
 </resources>

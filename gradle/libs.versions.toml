@@ -1,5 +1,7 @@
 [versions]
 agp = "8.6.0"
+appcompatVersion = "1.7.0"
+constraintlayoutVersion = "2.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -8,8 +10,15 @@ material = "1.10.0"
 activity = "1.9.3"
 constraintlayout = "2.1.4"
 legacySupportV4 = "1.0.0"
+materialVersion = "1.12.0"
+playServicesAuth = "21.2.0"
+playServicesLocation = "21.3.0"
+playServicesLocationLicense = "12.0.1"
+playServicesMaps = "18.1.0"
 
 [libraries]
+appcompat-v170 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
+constraintlayout-v220 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -18,6 +27,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+material-v1120 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-location-license = { module = "com.google.android.gms:play-services-location-license", version.ref = "playServicesLocationLicense" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

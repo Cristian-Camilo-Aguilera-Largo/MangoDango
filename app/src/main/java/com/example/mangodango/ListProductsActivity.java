@@ -29,5 +29,8 @@ public class ListProductsActivity extends AppCompatActivity {
 
         ButtonHandler buttonHandler = new ButtonHandler(this);
         buttonHandler.setupCartButton(cartButton);
+
+        ImageButton datosButton = findViewById(R.id.datosPersonales);
+        buttonHandler.setupDatosButton(datosButton);
     }
 }
