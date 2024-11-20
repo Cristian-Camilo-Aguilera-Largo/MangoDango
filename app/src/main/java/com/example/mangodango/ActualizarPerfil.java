@@ -25,7 +25,7 @@ public class ActualizarPerfil extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private Integer usuarioId;
     private Button eliminarCuentaButton;
-    ImageView imagenPersona = findViewById(R.id.ImagenPersona);
+    private ImageView imagenPersona;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class ActualizarPerfil extends AppCompatActivity {
         ButtonHandler buttonHandler = new ButtonHandler(this);
         buttonHandler.setupChangeDataButton(changeButton);
 
-
+        imagenPersona = findViewById(R.id.ImagenPersona);
         NombrePersona = findViewById(R.id.NombrePersona);
         CorreoPersona = findViewById(R.id.CorreoPersona);
         databaseHelper = new DatabaseHelper(this);
@@ -91,18 +91,24 @@ public class ActualizarPerfil extends AppCompatActivity {
             NombrePersona.setText(usuario.getNombre());
             CorreoPersona.setText(usuario.getCorreo());
             // Cargar la imagen de perfil desde la base de datos
-            byte[] imageBytes = usuario.getFoto();  // Supongo que tienes un método getFoto() que devuelve un byte[]
-            if (imageBytes != null) {
-                Log.d("ActualizarPerfil", "Imagen recuperada con éxito");
-                Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                 // Asegúrate de que tienes este ImageView en tu layout
-                imagenPersona.setImageBitmap(bitmap);  // Establece la imagen en el ImageView
-            } else {
-                // Si no hay imagen en la base de datos, puedes poner una imagen predeterminada
-                Log.d("ActualizarPerfil", "No hay imagen en la base de datos.");
-                ImageView imagenPersona = findViewById(R.id.ImagenPersona);
-                imagenPersona.setImageResource(R.drawable.person_circle);  // Usa una imagen predeterminada
+            try{
+                byte[] imageBytes = usuario.getFoto();  // Supongo que tienes un método getFoto() que devuelve un byte[]
+                if (imageBytes != null) {
+                    Log.d("ActualizarPerfil", "Imagen recuperada con éxito");
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                    // Asegúrate de que tienes este ImageView en tu layout
+                    imagenPersona.setImageBitmap(bitmap);  // Establece la imagen en el ImageView
+                } else {
+                    // Si no hay imagen en la base de datos, puedes poner una imagen predeterminada
+                    Log.d("ActualizarPerfil", "No hay imagen en la base de datos.");
+
+                    imagenPersona.setImageResource(R.drawable.person_circle);  // Usa una imagen predeterminada
+                }
+            } catch (Exception e){
+                Log.e("ActualizarPerfil", "Error al cargar la imagen del usuario", e);
+                imagenPersona.setImageResource(R.drawable.person_circle);
             }
+
         } else {
             Toast.makeText(this, "Error al cargar datos del usuario", Toast.LENGTH_SHORT).show();
         }

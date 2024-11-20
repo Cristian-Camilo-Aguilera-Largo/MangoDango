@@ -108,13 +108,14 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
             String nombre = nombreUsuario.getText().toString().trim();
             String correo = correoUsuario.getText().toString().trim();
             String password = passwordUsuario.getText().toString().trim();
+            byte[] imageBytes = null;
             Log.d("Registro", "Latitud: " + latitud + ", Longitud: " + longitud);
             if (!nombre.isEmpty() && !correo.isEmpty() && !password.isEmpty()) {
                 // Insertar datos en la base de datos
                 SQLiteDatabase db = databaseHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
                 if (selectedImageBitmap != null) {
-                    byte[] imageBytes = convertBitmapToByteArray(selectedImageBitmap);
+                    imageBytes = convertBitmapToByteArray(selectedImageBitmap);
                     values.put("foto", imageBytes);
                 }
                 values.put("nombre", nombre);
@@ -160,6 +161,10 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
             Uri imageUri = data.getData();
             try {
                 selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                // Redimensionar la imagen
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(selectedImageBitmap, 500, 500, true);
+
+                selectedImageBitmap = resizedBitmap;
                 profileImageView.setImageBitmap(selectedImageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -169,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
 
     private byte[] convertBitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         return stream.toByteArray();
     }
 
