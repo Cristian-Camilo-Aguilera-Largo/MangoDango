@@ -8,6 +8,15 @@
     android:layout_height="match_parent"
     tools:context=".ActualizarPerfil">
 
+    <ImageButton
+        android:id="@+id/volver2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#EF57BF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
     <ImageView
         android:id="@+id/ImagenPersona"
         android:layout_width="100dp"

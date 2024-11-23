@@ -65,4 +65,24 @@ public class ButtonHandler {
             }
         });
     }
+
+    public void setupActualizarDatos(ImageButton actualizarDatosButton) {
+        actualizarDatosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ActualizarPerfil.class);
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public void setupVolverLista(ImageButton volverlistaButton) {
+        volverlistaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ListProductsActivity.class);
+                context.startActivity(intent);
+            }
+        });
+    }
 }

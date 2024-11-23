@@ -4,12 +4,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
+import android.R.string;
 import com.example.mangodango.data.Usuario;
+
+import java.io.ByteArrayOutputStream;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "mangodango.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Constantes para nombres de tabla y columnas
     private static final String TABLE_USUARIOS = "usuarios";
@@ -40,7 +45,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_USUARIOS);
-
         // Crear índice para búsquedas por email
         db.execSQL("CREATE INDEX idx_usuarios_email ON " + TABLE_USUARIOS + "(" + COLUMN_EMAIL + ")");
     }
@@ -154,18 +158,19 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return rowsDeleted > 0;  // Si se eliminó al menos una fila, la cuenta se eliminó correctamente
     }
 
-    public boolean actualizarDatosUsuario(int usuarioId, String nuevoNombre, String nuevoEmail, String nuevaContraseña) {
+    public boolean actualizarDatosUsuario(int usuarioId, String nuevoNombre, String nuevoEmail, String nuevaContraseña, byte[] imageBytes) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("nombre", nuevoNombre);
         values.put("email", nuevoEmail);
         values.put("pass", nuevaContraseña);
-
+        values.put("foto", imageBytes);
         // Actualiza el usuario con el id proporcionado
         int rowsUpdated = db.update("usuarios", values, "id = ?", new String[]{String.valueOf(usuarioId)});
 
         return rowsUpdated > 0; // Devuelve true si se actualizó al menos un registro
     }
+
 
 }

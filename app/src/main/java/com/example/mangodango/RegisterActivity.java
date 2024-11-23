@@ -61,6 +61,8 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profileImageView;
     private Bitmap selectedImageBitmap;
+    private static final int CAMERA_REQUEST_CODE = 2;
+    private static final int CAMERA_PERMISSION_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +76,28 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
             return insets;
         });
 
+        Button abrirCamara = findViewById(R.id.abrirCamara);
+        abrirCamara.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+            } else {
+                openCamera();
+            }
+        });
+
         profileImageView = findViewById(R.id.profileImageView);
         Button selectImageButton = findViewById(R.id.selectImageButton);
 
         // Configurar el botón para seleccionar imagen
         selectImageButton.setOnClickListener(v -> openImagePicker());
 
-        ImageButton backButton = findViewById(R.id.imageButton);
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         //Configura el evento de clic para el boton "Volver"
+        ImageButton backButton = findViewById(R.id.imageButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,6 +139,8 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
                 long newRowId = db.insert("usuarios", null, values);
                 if (newRowId != -1) {
                     Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show();
                 }
@@ -157,7 +171,28 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Bundle extras = data.getExtras();
+            Bitmap photoBitmap = (Bitmap) extras.get("data");
+            if (photoBitmap != null) {
+                selectedImageBitmap = photoBitmap;
+                profileImageView.setImageBitmap(selectedImageBitmap); // Mostrar la foto en el ImageView
+
+                // Guardar la foto en la base de datos
+                SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                byte[] imageBytes = convertBitmapToByteArray(selectedImageBitmap);
+                values.put("foto", imageBytes);
+
+                long updatedRowId = db.update("usuarios", values, "email = ?", new String[]{correoUsuario.getText().toString().trim()});
+                if (updatedRowId != -1) {
+                    Toast.makeText(this, "Foto guardada exitosamente", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Error al guardar la foto", Toast.LENGTH_SHORT).show();
+                }
+                db.close();
+            }
+        } else if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
             try {
                 selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
@@ -169,6 +204,17 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+    }
+
+
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+        } else {
+            Toast.makeText(this, "No se pudo abrir la cámara", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -316,6 +362,13 @@ public class RegisterActivity extends AppCompatActivity implements OnMapReadyCal
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
         if (requestCode == LOCATION_PERMISSION_CODE) {
             boolean allPermissionsGranted = true;
             for (int result : grantResults) {

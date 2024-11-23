@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo blanco -->
+    <item android:drawable="@color/white" />
+
+    <!-- Logo centrado -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/mango" />
+    </item>
+
+    <!-- Borde rosado -->
+    <item>
+        <shape>
+            <stroke android:width="1dp" android:color="@color/pink" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,6 +1,7 @@
 package com.example.mangodango;
 
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -37,6 +38,9 @@ import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
+import android.graphics.Bitmap;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -230,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                                 // Obtener los datos del usuario
                                 String email = credential.getId();
                                 String nombre = credential.getDisplayName();
+                                String photoUrl = credential.getProfilePictureUri() != null ? credential.getProfilePictureUri().toString() : null;
 
                                 // Verificar que tenemos los datos necesarios
                                 if (email == null || nombre == null) {
@@ -238,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                                     return;
                                 }
 
-                                Log.d(TAG, "Datos obtenidos - Email: " + email + ", Nombre: " + nombre);
+                                Log.d(TAG, "Datos obtenidos - Email: " + email + ", Nombre: " + nombre+ ", Foto: " + photoUrl);
 
                                 // Primero verificar si el usuario ya existe
                                 if (usuarioExiste(email)) {
@@ -248,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 // Si no existe, intentar registrarlo
-                                if (registrarNuevoUsuario(nombre, email)) {
+                                if (registrarNuevoUsuario(nombre, email, photoUrl)) {
                                     Log.d(TAG, "Nuevo usuario registrado exitosamente");
                                     procederAListProducts();
                                 } else {
@@ -265,7 +270,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         Log.w(TAG, "Sign-in cancelado por el usuario");
-                        Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, ListProductsActivity.class);
+                        startActivity(intent);
+
                     }
                     button.setEnabled(true);
                 });
@@ -294,7 +301,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean registrarNuevoUsuario(String nombre, String email) {
+    private byte[] descargarImagen(String imageUrl) {
+        try {
+            URL url = new URL(imageUrl);
+            Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            Log.e(TAG, "Error al descargar la imagen: " + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    private boolean registrarNuevoUsuario(String nombre, String email, String photoUrl) {
         try {
             // Generar una contraseña aleatoria para usuarios de Google
             String passwordTemp = generarPasswordTemporal();
@@ -304,6 +324,13 @@ public class MainActivity extends AppCompatActivity {
             values.put("nombre", nombre);
             values.put("email", email);
             values.put("pass", passwordTemp); // Guardamos la contraseña temporal
+
+            // Descargar y guardar la foto como byte[]
+            byte[] fotoBytes = null;
+            if (photoUrl != null) {
+                fotoBytes = descargarImagen(photoUrl);
+            }
+            values.put("foto", fotoBytes);
 
             long resultado = db.insert("usuarios", null, values);
             db.close();

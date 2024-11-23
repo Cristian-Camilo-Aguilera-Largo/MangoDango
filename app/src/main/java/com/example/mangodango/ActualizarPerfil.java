@@ -42,7 +42,8 @@ public class ActualizarPerfil extends AppCompatActivity {
 
         ButtonHandler buttonHandler = new ButtonHandler(this);
         buttonHandler.setupChangeDataButton(changeButton);
-
+        ImageButton backButton = findViewById(R.id.volver2);
+        buttonHandler.setupVolverLista(backButton);
         imagenPersona = findViewById(R.id.ImagenPersona);
         NombrePersona = findViewById(R.id.NombrePersona);
         CorreoPersona = findViewById(R.id.CorreoPersona);
